@@ -1,6 +1,8 @@
 # thermal-hue
-Set of scripts to use your Hue Sensor as thermal sensor. (With history logging)
 
-## Dependency
+Use your Hue Sensor as a thermal sensor.
 
-pip install qhue
+```
+$ python3 main.py
+23.05
+```
