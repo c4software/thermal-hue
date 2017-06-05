@@ -2,6 +2,7 @@ from socket import getfqdn
 from settings import BRIDGE_IP, BRIDGE_USERMAME
 from .rest import callrest
 import json
+import logging
 
 def _api_path():
     if BRIDGE_USERMAME is "":
@@ -34,4 +35,5 @@ def get_temp():
     for s in sensor:
         ret = sensor[s]
         if ret["type"] == "ZLLTemperature":
+            logging.debug("Last Updated : {}".format(ret["state"]["lastupdated"]))
             return ret['state']['temperature']
