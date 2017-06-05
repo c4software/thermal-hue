@@ -4,7 +4,7 @@ from .rest import callrest
 import json
 
 def _api_path():
-    if BRIDGE_USERMAME is None:
+    if BRIDGE_USERMAME is "":
         return "/api"
     else:
         return "/api/{}".format(BRIDGE_USERMAME)
@@ -24,6 +24,11 @@ def init_bridge():
 
 
 def get_temp():
+
+    if BRIDGE_USERMAME is "":
+        print ("BRIDGE_USERMAME is required. To use this script please run « python3 main.py --initbridge » and follow the instruction.")
+        exit()
+
     ret = callrest(domain=BRIDGE_IP, path=_api_path() + "/sensors/")
     sensor = json.loads(ret[2])
     for s in sensor:
