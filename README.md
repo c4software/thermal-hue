@@ -1,6 +1,6 @@
 # thermal-hue
 
-Use your Hue Sensor as a thermal sensor.
+Use your Hue Motion Sensor as thermal sensor.
 
 ## Quick use
 
