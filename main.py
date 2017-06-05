@@ -1,18 +1,13 @@
 import argparse
-import sqlite3
-from db import init_db
-
-try:
-    conn = sqlite3.connect('data.db')
-except e as Exception:
-    print ("Sqlite db can't be write")
-    exit()
+from tools.bridge import init_bridge, get_temp
+import json
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--stdin", action="store_true", help="Output the current temperature value to the stdin")
-parser.add_argument("--init", action="store_true", help="Init the database")
+parser.add_argument("--initbridge", action="store_true", help="Init the communication with de Hue Bridge.")
 args = parser.parse_args()
 
-if args.init:
-    init_db()
+if args.initbridge:
+    init_bridge()
     exit()
+
+print (get_temp() / 100)
