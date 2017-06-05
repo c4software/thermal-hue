@@ -11,7 +11,7 @@ def _api_path():
 
 def init_bridge():
     try:
-        input("Press the Bridge button, then press Return: ")
+        input("Press the Bridge button, then press Return")
         fq_device_type = "thermal-hue@{}".format(getfqdn())
         ret = callrest(domain=BRIDGE_IP, port=80, type="POST", params={"devicetype": fq_device_type})
         ret = json.loads(ret[2])
