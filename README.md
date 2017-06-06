@@ -17,3 +17,7 @@ Now the srcipt should output the current temperature.
 $ python3 main.py
 23.05
 ```
+
+## Sample results
+
+![sample](screenshot/capture.png)
