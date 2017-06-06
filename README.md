@@ -8,7 +8,7 @@ First allow the script to use your Bridge.
 ```
 $ python3 main.py --initbridge
 Press the Bridge button, then press Return.
-You can edit the settings.py and set the BRIDGE_USERMAME to 'You-Token'
+You can edit the settings.py and set the BRIDGE_USERMAME to 'Your-Token'
 $ vim settings.py
 ```
 
