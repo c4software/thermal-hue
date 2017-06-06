@@ -27,7 +27,7 @@ def init_bridge():
 def get_temp():
 
     if BRIDGE_USERMAME is "":
-        print ("BRIDGE_USERMAME is required. To use this script please run « python3 main.py --initbridge » and follow the instruction.")
+        print ("BRIDGE_USERMAME is required. To use this script please run 'python3 main.py --initbridge' and follow the instruction.")
         exit()
 
     ret = callrest(domain=BRIDGE_IP, path=_api_path() + "/sensors/")
