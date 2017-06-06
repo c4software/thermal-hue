@@ -1,4 +1,4 @@
-# thermal-hue
+# Thermal hue
 
 Use your Hue Motion Sensor as thermal sensor.
 
@@ -21,3 +21,7 @@ $ python3 main.py
 ## Sample results
 
 ![sample](screenshot/capture.png)
+
+## Use Google Spreadsheets as backend
+
+Soon…
