@@ -10,6 +10,14 @@ def _api_path():
     else:
         return "/api/{}".format(BRIDGE_USERMAME)
 
+def find_bridge():
+    ret = callrest(domain="www.meethue.com", path="api/nupnp", port=80)[2]
+    ret = json.loads(ret)
+    if ret:
+        return ret[0]["internalipaddress"]
+    else:
+        return None
+
 def init_bridge():
     try:
         input("Press the Bridge button, then press Return")
