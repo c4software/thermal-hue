@@ -10,15 +10,15 @@ def _api_path():
     else:
         return "/api/{}".format(BRIDGE_USERMAME)
 
-def find_bridge():
+def find_bridge(bridge_number):
     try:
         ret = callrest(domain="www.meethue.com", ssl=True, path="/api/nupnp", port=443)[2]
         ret = json.loads(ret)
         if ret:
-            return ret[0]["internalipaddress"]
+            return ret[int(bridge_number)]["internalipaddress"]
         else:
             return None
-    except:
+    except Exception as e:
         return None
 
 def init_bridge(BRIDGE_IP):

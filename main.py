@@ -11,7 +11,7 @@ parser.add_argument("--initbridge", action="store_true", help="Init the communic
 args = parser.parse_args()
 
 if not BRIDGE_IP:
-    BRIDGE_IP=find_bridge()
+    BRIDGE_IP=find_bridge(args.bridge)
 
 if not BRIDGE_IP:
     print  ("No bridge found on your network. Try to set the 'BRIDGE_IP' value in the settings.py")
