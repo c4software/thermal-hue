@@ -1,5 +1,5 @@
 from socket import getfqdn
-from settings import BRIDGE_IP, BRIDGE_USERMAME
+from settings import BRIDGE_USERMAME
 from .rest import callrest
 import json
 import logging
@@ -11,14 +11,17 @@ def _api_path():
         return "/api/{}".format(BRIDGE_USERMAME)
 
 def find_bridge():
-    ret = callrest(domain="www.meethue.com", path="api/nupnp", port=80)[2]
-    ret = json.loads(ret)
-    if ret:
-        return ret[0]["internalipaddress"]
-    else:
+    try:
+        ret = callrest(domain="www.meethue.com", ssl=True, path="/api/nupnp", port=443)[2]
+        ret = json.loads(ret)
+        if ret:
+            return ret[0]["internalipaddress"]
+        else:
+            return None
+    except:
         return None
 
-def init_bridge():
+def init_bridge(BRIDGE_IP):
     try:
         input("Press the Bridge button, then press Return")
         fq_device_type = "thermal-hue@{}".format(getfqdn())
@@ -32,8 +35,7 @@ def init_bridge():
         print ("Link button not pressed")
 
 
-def get_temp():
-
+def get_temp(BRIDGE_IP):
     if BRIDGE_USERMAME is "":
         print ("BRIDGE_USERMAME is required. To use this script please run 'python3 main.py --initbridge' and follow the instruction.")
         exit()
