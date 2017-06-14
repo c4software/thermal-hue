@@ -7,8 +7,10 @@ function doGet(e) {
       status = "No parameters";
   }
   else {
+    
+    var sheetName = e.parameter["sn"]?e.parameter["sn"]:"Data"; // SheetName can be pass througth the url
     var id = 'YOUR-GOOGLE-SPREADSHEET-ID'; // Spreadsheet id
-    var sheet = SpreadsheetApp.openById(id).getSheetByName("Data");
+    var sheet = SpreadsheetApp.openById(id).getSheetByName(sheetName);
     
     for (var param in e.parameter) {
       var value = e.parameter[param].replace(/^["']|['"]$/g, "");
