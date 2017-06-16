@@ -6,10 +6,9 @@ function doGet(e) {
   if (e == undefined || e.parameters == undefined) {
       status = "No parameters";
   }
-  else {
-    
+  else {    
     var sheetName = e.parameter["sn"]?e.parameter["sn"]:"Data"; // SheetName can be pass througth the url
-    var id = 'YOUR-GOOGLE-SPREADSHEET-ID'; // Spreadsheet id
+    var id = 'YOUR_GOOGLE-SPREADSHEET-ID'; // Spreadsheet id
     var sheet = SpreadsheetApp.openById(id).getSheetByName(sheetName);
     
     for (var param in e.parameter) {
@@ -18,8 +17,8 @@ function doGet(e) {
         case "pushData":
           data = add_data(sheet, value.split(","));
           break;
-        case 'getLast':
-          data = get_values(sheet);
+        case 'get':
+          data = create_data_return(sheet);
           break;
         default:
           status = "0";
@@ -39,10 +38,44 @@ function add_data(sheet, rowData){
   return rowData;
 }
 
-function get_values(sheet){
-  // Get last Inserted values
+// Get last Inserted values
+function get_last_value(sheet){
   var dataRange = sheet.getRange("A2:B2");
   return dataRange.getValues();
+}
+
+// Get the next to values.
+function get_nextto_value(sheet){
+  var dataRange = sheet.getRange("A3:B3");
+  return dataRange.getValues();
+}
+
+
+function create_data_return(sheet){
+  last = get_last_value(sheet);
+  nextto = get_nextto_value(sheet);
+  trend = "";
+  
+  last_value = last[0][1];
+  nextto_value = nextto[0][1];
+  
+  if (last_value > nextto_value){
+    trend = "+";
+  }else if (last_value < nextto_value){
+    trend = "-";  
+  }else{
+    trend = "=";
+  }
+  
+  var data = {
+    "last": {
+      "value": last[0][1],
+      "date": last[0][0]
+    },
+    "trend": trend
+  };
+  
+  return data;
 }
 
 function make_return(status, data){
