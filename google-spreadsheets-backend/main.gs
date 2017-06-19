@@ -8,7 +8,7 @@ function doGet(e) {
   }
   else {    
     var sheetName = e.parameter["sn"]?e.parameter["sn"]:"Data"; // SheetName can be pass througth the url
-    var id = 'YOUR_GOOGLE-SPREADSHEET-ID'; // Spreadsheet id
+    var id = 'YOUR_GOOGLE_SHEET_ID'; // Spreadsheet id
     var sheet = SpreadsheetApp.openById(id).getSheetByName(sheetName);
     
     for (var param in e.parameter) {
@@ -50,14 +50,18 @@ function get_nextto_value(sheet){
   return dataRange.getValues();
 }
 
+function get_history_range(sheet){
+  var dataRange = sheet.getRange("A2:B100");
+  return dataRange.getValues();
+}
 
 function create_data_return(sheet){
   last = get_last_value(sheet);
   nextto = get_nextto_value(sheet);
   trend = "";
   
-  last_value = last[0][1];
-  nextto_value = nextto[0][1];
+  last_value = last[0][1].toFixed(1);
+  nextto_value = nextto[0][1].toFixed(1);
   
   if (last_value > nextto_value){
     trend = "+";
@@ -72,6 +76,7 @@ function create_data_return(sheet){
       "value": last[0][1],
       "date": last[0][0]
     },
+    history: get_history_range(sheet),
     "trend": trend
   };
   
