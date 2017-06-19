@@ -51,8 +51,14 @@ function get_nextto_value(sheet){
 }
 
 function get_history_range(sheet){
-  var dataRange = sheet.getRange("A2:B100");
-  return dataRange.getValues();
+  var dataRange = sheet.getRange("A2:B100").getValues();
+  var dataReturn = [];
+  for (i in dataRange){
+    item = dataRange[i];
+    dataReturn.push({key: item[0], value: item[1]});
+  }
+  
+  return dataReturn;
 }
 
 function create_data_return(sheet){
