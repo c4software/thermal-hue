@@ -51,7 +51,7 @@ function get_nextto_value(sheet){
 }
 
 function get_history_range(sheet){
-  var dataRange = sheet.getRange("A2:B100").getValues();
+  var dataRange = sheet.getRange("A2:B100").getValues().reverse();
   var dataReturn = [];
   for (i in dataRange){
     item = dataRange[i];
