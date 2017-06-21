@@ -55,7 +55,7 @@ function get_history_range(sheet){
   var dataReturn = [];
   for (i in dataRange){
     item = dataRange[i];
-    dataReturn.push({key: item[0], value: item[1]});
+    dataReturn.push({key: item[0].replace(/:/, " "), value: item[1]});
   }
   
   return dataReturn;
