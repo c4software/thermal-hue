@@ -7,22 +7,26 @@ function doGet(e) {
       status = "No parameters";
   }
   else {    
-    var sheetName = e.parameter["sn"]?e.parameter["sn"]:"Data"; // SheetName can be pass througth the url
-    var id = 'YOUR_GOOGLE_SHEET_ID'; // Spreadsheet id
+    var sheetName = e.parameter["sn"]?e.parameter["sn"]:"Salon"; // SheetName can be pass througth the url
+    var id = 'YOUR-GOOGLE-SPREADSHEET-ID'; // Spreadsheet id
     var sheet = SpreadsheetApp.openById(id).getSheetByName(sheetName);
+    var data = {};
     
-    for (var param in e.parameter) {
-      var value = e.parameter[param].replace(/^["']|['"]$/g, "");
-      switch (param) {
-        case "pushData":
-          data = add_data(sheet, value.split(","));
-          break;
-        case 'get':
-          data = create_data_return(sheet);
-          break;
-        default:
-          status = "0";
+    if("pushData" in e.parameter){
+      var value = e.parameter["pushData"].replace(/^["']|['"]$/g, "");
+      data = add_data(sheet, value.split(","));
+    }else if ("get" in e.parameter){
+      data = create_data_return(sheet);
+    }else if ("getmultiple" in e.parameter){
+      var value = e.parameter["getmultiple"].replace(/^["']|['"]$/g, "");
+      var sns = value.split(",");
+      for (var sheetName in sns){
+        sheetName = sns[sheetName];
+        sheet = SpreadsheetApp.openById(id).getSheetByName(sheetName);
+        data[sheetName] = create_data_return(sheet);
       }
+    }else{
+      status = 0;
     }
   }
 
@@ -62,13 +66,18 @@ function get_history_range(sheet){
 }
 
 function create_data_return(sheet){
+  // Get last value in the selected sheet
   last = get_last_value(sheet);
+  
+  // Get the n-1 value
   nextto = get_nextto_value(sheet);
   trend = "";
   
+  // Get and format value
   last_value = last[0][1].toFixed(1);
   nextto_value = nextto[0][1].toFixed(1);
   
+  // Calculate the trend
   if (last_value > nextto_value){
     trend = "+";
   }else if (last_value < nextto_value){
@@ -77,13 +86,14 @@ function create_data_return(sheet){
     trend = "=";
   }
   
+  // Format data 
   var data = {
     "last": {
       "value": last[0][1],
       "date": last[0][0]
     },
-    history: get_history_range(sheet),
-    "trend": trend
+    "trend": trend,
+    "history": get_history_range(sheet) // Get the history for the sheets
   };
   
   return data;
