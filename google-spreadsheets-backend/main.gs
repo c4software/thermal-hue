@@ -16,7 +16,7 @@ function doGet(e) {
       data = add_data(sheet, value.split(","));
     }else if ("get" in e.parameter){
       data = create_data_return(sheet);
-    }else if ("getmultiple" in e.parameter){
+    }else if ("getMultiple" in e.parameter){
       var value = e.parameter["getmultiple"].replace(/^["']|['"]$/g, "");
       var sns = value.split(",");
       for (var sheetName in sns){
