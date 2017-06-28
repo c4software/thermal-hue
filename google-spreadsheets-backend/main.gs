@@ -8,8 +8,7 @@ function doGet(e) {
   }
   else {    
     var sheetName = e.parameter["sn"]?e.parameter["sn"]:"Salon"; // SheetName can be pass througth the url
-    var id = 'YOUR-GOOGLE-SPREADSHEET-ID'; // Spreadsheet id
-    var sheet = SpreadsheetApp.openById(id).getSheetByName(sheetName);
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
     var data = {};
     
     if("pushData" in e.parameter){
@@ -22,9 +21,11 @@ function doGet(e) {
       var sns = value.split(",");
       for (var sheetName in sns){
         sheetName = sns[sheetName];
-        sheet = SpreadsheetApp.openById(id).getSheetByName(sheetName);
+        sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
         data[sheetName] = create_data_return(sheet);
       }
+    }else if("getSheetsName" in e.parameter){
+      data = get_all_sheetsName();
     }else{
       status = 0;
     }
@@ -34,6 +35,17 @@ function doGet(e) {
   return make_return(status, data);
 }
 
+function get_all_sheetsName(){
+  var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+  var data = []
+  
+  for (var s in sheets){
+    data.push(sheets[s].getName());
+  }
+  
+  return data;
+}
+  
 function add_data(sheet, rowData){
   // Write new row to spreadsheet
   sheet.insertRows(2);
