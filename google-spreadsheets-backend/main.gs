@@ -40,7 +40,10 @@ function get_all_sheetsName(){
   var data = []
   
   for (var s in sheets){
-    data.push(sheets[s].getName());
+    var sheetName = sheets[s].getName();
+    if (sheetName.indexOf("_") !== 0){
+      data.push(sheetName);
+    }
   }
   
   return data;
