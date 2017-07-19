@@ -80,6 +80,20 @@ function get_history_range(sheet){
   return dataReturn;
 }
 
+function get_average_range(sheet){
+  var dataRange = sheet.getRange("B2:B100").getValues();
+  var somme = 0;
+  if(dataRange.length > 0){
+    for (i in dataRange){
+      somme = somme + Number(dataRange[i]);
+    }
+    
+    return (somme / dataRange.length).toFixed(1);
+  }else{
+    return "";
+  }
+}
+
 function create_data_return(sheet){
   // Get last value in the selected sheet
   last = get_last_value(sheet);
@@ -107,6 +121,7 @@ function create_data_return(sheet){
       "value": last[0][1],
       "date": last[0][0]
     },
+    "average": get_average_range(sheet),
     "trend": trend,
     "history": get_history_range(sheet) // Get the history for the sheets
   };
