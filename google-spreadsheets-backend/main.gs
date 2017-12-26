@@ -7,22 +7,27 @@ function doGet(e) {
       status = "No parameters";
   }
   else {    
-    var sheetName = e.parameter["sn"]?e.parameter["sn"]:"Data"; // SheetName can be pass througth the url
-    var id = 'YOUR_GOOGLE_SHEET_ID'; // Spreadsheet id
-    var sheet = SpreadsheetApp.openById(id).getSheetByName(sheetName);
+    var sheetName = e.parameter["sn"]?e.parameter["sn"]:"Salon"; // SheetName can be pass througth the url
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+    var data = {};
     
-    for (var param in e.parameter) {
-      var value = e.parameter[param].replace(/^["']|['"]$/g, "");
-      switch (param) {
-        case "pushData":
-          data = add_data(sheet, value.split(","));
-          break;
-        case 'get':
-          data = create_data_return(sheet);
-          break;
-        default:
-          status = "0";
+    if("pushData" in e.parameter){
+      var value = e.parameter["pushData"].replace(/^["']|['"]$/g, "");
+      data = add_data(sheet, value.split(","));
+    }else if ("get" in e.parameter){
+      data = create_data_return(sheet);
+    }else if ("getMultiple" in e.parameter){
+      var value = e.parameter["getmultiple"].replace(/^["']|['"]$/g, "");
+      var sns = value.split(",");
+      for (var sheetName in sns){
+        sheetName = sns[sheetName];
+        sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+        data[sheetName] = create_data_return(sheet);
       }
+    }else if("getSheetsName" in e.parameter){
+      data = get_all_sheetsName();
+    }else{
+      status = 0;
     }
   }
 
@@ -30,6 +35,20 @@ function doGet(e) {
   return make_return(status, data);
 }
 
+function get_all_sheetsName(){
+  var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+  var data = []
+  
+  for (var s in sheets){
+    var sheetName = sheets[s].getName();
+    if (sheetName.indexOf("_") !== 0){
+      data.push(sheetName);
+    }
+  }
+  
+  return data;
+}
+  
 function add_data(sheet, rowData){
   // Write new row to spreadsheet
   sheet.insertRows(2);
@@ -51,24 +70,43 @@ function get_nextto_value(sheet){
 }
 
 function get_history_range(sheet){
-  var dataRange = sheet.getRange("A2:B100").getValues();
+  var dataRange = sheet.getRange("A2:B100").getValues().reverse();
   var dataReturn = [];
   for (i in dataRange){
     item = dataRange[i];
-    dataReturn.push({key: item[0], value: item[1]});
+    dataReturn.push({key: item[0].replace(/:/, " "), value: item[1]});
   }
   
   return dataReturn;
 }
 
+function get_average_range(sheet){
+  var dataRange = sheet.getRange("B2:B100").getValues();
+  var somme = 0;
+  if(dataRange.length > 0){
+    for (i in dataRange){
+      somme = somme + Number(dataRange[i]);
+    }
+    
+    return (somme / dataRange.length).toFixed(1);
+  }else{
+    return "";
+  }
+}
+
 function create_data_return(sheet){
+  // Get last value in the selected sheet
   last = get_last_value(sheet);
+  
+  // Get the n-1 value
   nextto = get_nextto_value(sheet);
   trend = "";
   
+  // Get and format value
   last_value = last[0][1].toFixed(1);
   nextto_value = nextto[0][1].toFixed(1);
   
+  // Calculate the trend
   if (last_value > nextto_value){
     trend = "+";
   }else if (last_value < nextto_value){
@@ -77,13 +115,15 @@ function create_data_return(sheet){
     trend = "=";
   }
   
+  // Format data 
   var data = {
     "last": {
       "value": last[0][1],
       "date": last[0][0]
     },
-    history: get_history_range(sheet),
-    "trend": trend
+    "average": get_average_range(sheet),
+    "trend": trend,
+    "history": get_history_range(sheet) // Get the history for the sheets
   };
   
   return data;
