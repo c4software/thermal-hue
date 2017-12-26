@@ -24,4 +24,9 @@ if args.initbridge:
 if args.debug:
     logging.basicConfig(level=logging.DEBUG)
 
-print (get_temp(BRIDGE_IP=BRIDGE_IP) / 100)
+temperature = get_temp(BRIDGE_IP=BRIDGE_IP)
+
+if temperature:
+    print (get_temp(BRIDGE_IP=BRIDGE_IP) / 100)
+else:
+    print ("No sensor found")
