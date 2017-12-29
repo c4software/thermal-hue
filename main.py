@@ -8,13 +8,18 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--debug", action="store_true", help="Display debug info (lastupdated information).")
 parser.add_argument("--bridge", default=0, help="Index number of your bridge (default 0, the first bridge of your network)")
 parser.add_argument("--initbridge", action="store_true", help="Init the communication with de Hue Bridge.")
+
+# Overide settings.py
+parser.add_argument("--ip", default=None, help="Init the communication with de Hue Bridge.")
 args = parser.parse_args()
 
+if args.ip:
+    BRIDGE_IP = args.ip
 if not BRIDGE_IP:
     BRIDGE_IP = find_bridge(args.bridge)
 
 if not BRIDGE_IP:
-    print ("No bridge found on your network. Try to set the 'BRIDGE_IP' value in the settings.py")
+    print("No bridge found on your network. Try to set the 'BRIDGE_IP' value in the settings.py")
     exit()
 
 if args.initbridge:
