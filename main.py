@@ -11,10 +11,10 @@ parser.add_argument("--initbridge", action="store_true", help="Init the communic
 args = parser.parse_args()
 
 if not BRIDGE_IP:
-    BRIDGE_IP=find_bridge(args.bridge)
+    BRIDGE_IP = find_bridge(args.bridge)
 
 if not BRIDGE_IP:
-    print  ("No bridge found on your network. Try to set the 'BRIDGE_IP' value in the settings.py")
+    print ("No bridge found on your network. Try to set the 'BRIDGE_IP' value in the settings.py")
     exit()
 
 if args.initbridge:
@@ -27,6 +27,6 @@ if args.debug:
 temperature = get_temp(BRIDGE_IP=BRIDGE_IP)
 
 if temperature:
-    print (get_temp(BRIDGE_IP=BRIDGE_IP) / 100)
+    print(get_temp(BRIDGE_IP=BRIDGE_IP) / 100)
 else:
-    print ("No sensor found")
+    print("No sensor found")
