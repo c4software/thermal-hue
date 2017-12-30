@@ -9,8 +9,10 @@ parser.add_argument("--debug", action="store_true", help="Display debug info (la
 parser.add_argument("--bridge", default=0, help="Index number of your bridge (default 0, the first bridge of your network)")
 parser.add_argument("--initbridge", action="store_true", help="Init the communication with de Hue Bridge.")
 
+parser.add_argument("--correction", default=0, type=float, help="Temperature correction")
+
 # Overide settings.py
-parser.add_argument("--ip", default=None, help="Ip of the bridge.")
+parser.add_argument("--ip", default=None ,help="Ip of the bridge.")
 args = parser.parse_args()
 
 if args.ip:
@@ -30,8 +32,8 @@ if args.debug:
     logging.basicConfig(level=logging.DEBUG)
 
 temperature = get_temp(BRIDGE_IP=BRIDGE_IP)
-
 if temperature:
-    print(get_temp(BRIDGE_IP=BRIDGE_IP) / 100)
+    temperature = (temperature / 100) + args.correction
+    print (temperature)
 else:
     print("No sensor found")
