@@ -10,7 +10,7 @@ parser.add_argument("--bridge", default=0, help="Index number of your bridge (de
 parser.add_argument("--initbridge", action="store_true", help="Init the communication with de Hue Bridge.")
 
 # Overide settings.py
-parser.add_argument("--ip", default=None, help="Init the communication with de Hue Bridge.")
+parser.add_argument("--ip", default=None, help="Ip of the bridge.")
 args = parser.parse_args()
 
 if args.ip:
