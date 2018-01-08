@@ -1,6 +1,6 @@
 # Thermal hue
 
-Use your Hue Motion Sensor as thermal sensor.
+Use your Hue Motion Sensor as temperature sensor.
 
 ## Quick use
 
@@ -13,7 +13,7 @@ You can edit the settings.py and set the BRIDGE_USERMAME to 'Your-Token'
 $ vim settings.py
 ```
 
-Now the srcipt should output the current temperature.
+Now the script should output the current temperature.
 ```sh
 $ python3 main.py
 23.05
